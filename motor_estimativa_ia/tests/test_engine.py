@@ -64,6 +64,22 @@ class EstimationEngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             pert_hours(activity, self.parameters)
 
+    def test_hour_order_error_names_the_activity_not_its_id(self):
+        project = copy.deepcopy(self.project)
+        activity = self._first_activity(project)
+        activity.update(optimistic_hours=10, most_likely_hours=3, pessimistic_hours=8)
+        with self.assertRaises(ValueError) as ctx:
+            calculate_project(project, self.parameters)
+        self.assertIn(activity["name"], str(ctx.exception))
+        self.assertNotIn(f' {activity["id"]}', str(ctx.exception))
+
+    def test_empty_scope_is_rejected(self):
+        project = copy.deepcopy(self.project)
+        project["features"] = []
+        project["transversal_tasks"] = []
+        with self.assertRaisesRegex(ValueError, "não tem atividades"):
+            calculate_project(project, self.parameters)
+
     def test_costs_are_nonnegative_and_summary_matches_activity_sum(self):
         result = calculate_project(self.project, self.parameters)
         activity_sum = round(sum(a["base_labor_cost"] for a in result["activities"]), 2)

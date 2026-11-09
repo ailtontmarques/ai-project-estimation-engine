@@ -46,6 +46,21 @@ class ParameterSetTests(DatabaseTestCase):
         invalid = self.new_parameters("3.1")
         invalid["contingency_rate_default"] = 2
         self.assertEqual(self.client.post("/parameter-sets", json={"content": invalid}, headers=admin).status_code, 422)
+        for blank in ("", "   "):
+            unnamed = self.new_parameters(blank)
+            self.assertEqual(self.client.post("/parameter-sets", json={"content": unnamed}, headers=admin).status_code,
+                             422, f"config_version={blank!r}")
+
+    def test_legacy_set_without_version_is_still_readable(self):
+        # Conjuntos gravados antes da validação podem ter config_version vazio; ler não pode dar 500.
+        from db import ParameterSet
+        legacy = self.new_parameters("")
+        with self.Session() as session:
+            session.add(ParameterSet(version="", content=legacy, effective_at=datetime.now(timezone.utc)))
+            session.commit()
+        response = self.client.get("/parameter-sets/current", headers=self.as_user(self.po))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["version"], "")
 
     def test_no_current_parameter_set_blocks_estimates(self):
         with self.engine.begin() as conn:
@@ -189,6 +204,16 @@ class EstimateTests(DatabaseTestCase):
         project = self.client.post("/projects", json=payload, headers=self.as_user(self.tl)).json()
         response = self.client.post(f"/projects/{project['id']}/estimates", headers=self.as_user(self.po))
         self.assertEqual(response.status_code, 422)
+        self.assertEqual(self.client.get(f"/projects/{project['id']}/estimates", headers=self.as_user(self.po)).json(), [])
+
+    def test_empty_scope_is_not_estimated(self):
+        payload = self.project_payload()
+        payload["content"]["features"] = []
+        payload["content"]["transversal_tasks"] = []
+        project = self.client.post("/projects", json=payload, headers=self.as_user(self.tl)).json()
+        response = self.client.post(f"/projects/{project['id']}/estimates", headers=self.as_user(self.po))
+        self.assertEqual(response.status_code, 422)
+        self.assertIn("não tem atividades", response.json()["detail"])
         self.assertEqual(self.client.get(f"/projects/{project['id']}/estimates", headers=self.as_user(self.po)).json(), [])
 
     def test_archived_project_does_not_receive_estimates(self):
