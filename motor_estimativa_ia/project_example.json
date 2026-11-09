@@ -1,0 +1,216 @@
+{
+  "project_id": "exemplo-001",
+  "name": "Portal de solicitações internas",
+  "description": "Projeto fictício para demonstrar estimativas por funcionalidade e atividade.",
+  "contingency_rate": 0.15,
+  "features": [
+    {
+      "id": "F01",
+      "name": "Autenticação de usuários",
+      "tasks": [
+        {
+          "id": "T01",
+          "name": "Implementar login e logout",
+          "activities": [
+            {
+              "id": "A01",
+              "name": "Implementação backend/frontend",
+              "activity_type": "implementacao",
+              "ai_modality": "geracao_codigo",
+              "optimistic_hours": 8,
+              "most_likely_hours": 12,
+              "pessimistic_hours": 20,
+              "allocations": {
+                "desenvolvimento": {
+                  "pleno": 0.8,
+                  "senior": 0.2
+                }
+              }
+            },
+            {
+              "id": "A02",
+              "name": "Testes funcionais",
+              "activity_type": "testes",
+              "ai_modality": "qa_assistido",
+              "optimistic_hours": 3,
+              "most_likely_hours": 5,
+              "pessimistic_hours": 8,
+              "allocations": {
+                "qa": {
+                  "pleno": 0.8,
+                  "senior": 0.2
+                }
+              }
+            },
+            {
+              "id": "A03",
+              "name": "Revisão de segurança",
+              "activity_type": "seguranca",
+              "optimistic_hours": 2,
+              "most_likely_hours": 4,
+              "pessimistic_hours": 7,
+              "allocations": {
+                "devsecops": {
+                  "pleno": 0.5,
+                  "senior": 0.5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "T02",
+          "name": "Recuperação de senha",
+          "activities": [
+            {
+              "id": "A04",
+              "name": "Fluxo de recuperação e e-mail",
+              "activity_type": "implementacao",
+              "ai_modality": "geracao_codigo",
+              "optimistic_hours": 5,
+              "most_likely_hours": 8,
+              "pessimistic_hours": 14,
+              "allocations": {
+                "desenvolvimento": {
+                  "pleno": 0.7,
+                  "senior": 0.3
+                }
+              }
+            },
+            {
+              "id": "A05",
+              "name": "Testes de recuperação",
+              "activity_type": "testes",
+              "ai_modality": "qa_assistido",
+              "optimistic_hours": 2,
+              "most_likely_hours": 4,
+              "pessimistic_hours": 6,
+              "allocations": {
+                "qa": {
+                  "pleno": 1.0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "Cadastro de solicitações",
+      "tasks": [
+        {
+          "id": "T03",
+          "name": "Criar e consultar solicitação",
+          "activities": [
+            {
+              "id": "A06",
+              "name": "API e regras de negócio",
+              "activity_type": "implementacao",
+              "ai_modality": "geracao_codigo",
+              "optimistic_hours": 10,
+              "most_likely_hours": 16,
+              "pessimistic_hours": 26,
+              "allocations": {
+                "desenvolvimento": {
+                  "pleno": 0.7,
+                  "senior": 0.3
+                }
+              }
+            },
+            {
+              "id": "A07",
+              "name": "Tela de cadastro e listagem",
+              "activity_type": "interface",
+              "ai_modality": "vibe_coding",
+              "optimistic_hours": 8,
+              "most_likely_hours": 13,
+              "pessimistic_hours": 22,
+              "allocations": {
+                "desenvolvimento": {
+                  "junior": 0.2,
+                  "pleno": 0.6,
+                  "senior": 0.2
+                }
+              }
+            },
+            {
+              "id": "A08",
+              "name": "Testes de integração",
+              "activity_type": "testes",
+              "ai_modality": "qa_assistido",
+              "optimistic_hours": 4,
+              "most_likely_hours": 7,
+              "pessimistic_hours": 12,
+              "allocations": {
+                "qa": {
+                  "pleno": 0.7,
+                  "senior": 0.3
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "transversal_tasks": [
+    {
+      "id": "T04",
+      "name": "Preparar ambiente e pipeline",
+      "activities": [
+        {
+          "id": "A09",
+          "name": "CI/CD e configuração de ambiente",
+          "activity_type": "infraestrutura",
+          "scope_key": "ci_cd",
+          "ai_modality": "devsecops_assistido",
+          "optimistic_hours": 5,
+          "most_likely_hours": 8,
+          "pessimistic_hours": 14,
+          "allocations": {
+            "devsecops": {
+              "pleno": 0.6,
+              "senior": 0.4
+            }
+          }
+        },
+        {
+          "id": "A10",
+          "name": "Validação de implantação",
+          "activity_type": "testes",
+          "scope_key": "validacao_implantacao",
+          "optimistic_hours": 2,
+          "most_likely_hours": 4,
+          "pessimistic_hours": 7,
+          "allocations": {
+            "qa": {
+              "pleno": 0.5,
+              "senior": 0.5
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "cost_items": [
+    {
+      "id": "C01",
+      "description": "Hospedagem e banco gerenciado durante o desenvolvimento",
+      "cost_type": "infraestrutura",
+      "amount": 400
+    },
+    {
+      "id": "C02",
+      "description": "Assinatura de assistente de código com IA",
+      "cost_type": "ferramentas_ia",
+      "amount": 150
+    },
+    {
+      "id": "C03",
+      "description": "Provedor de envio de e-mail (valor a confirmar)",
+      "cost_type": "licencas",
+      "amount": null
+    }
+  ]
+}

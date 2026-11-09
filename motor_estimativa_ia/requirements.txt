@@ -1,0 +1,13 @@
+# O motor (engine.py) usa apenas a biblioteca padrão; Python 3.10+
+# Dependências da API (api.py, models.py) e da integração com o SSO (sso.py):
+fastapi>=0.115
+pydantic>=2.7
+uvicorn>=0.30
+httpx>=0.27
+# Persistência (db.py, services.py, migrations/):
+sqlalchemy>=2.1
+psycopg[binary]>=3.1
+alembic>=1.13
+python-dotenv>=1.0
+# Decomposição assistida por IA (ai.py):
+openai>=3.46

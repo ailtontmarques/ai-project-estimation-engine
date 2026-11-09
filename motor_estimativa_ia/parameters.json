@@ -1,0 +1,128 @@
+{
+  "config_version": "3.0",
+  "currency": "BRL",
+  "provenance": {
+    "pert": {
+      "validation_status": "validado",
+      "source": "técnica PERT padrão (O + 4M + P) / 6"
+    },
+    "roles": {
+      "validation_status": "hipotese",
+      "source": "valores ilustrativos; substituir pelo custo-hora interno"
+    },
+    "contingency_rate_default": {
+      "validation_status": "hipotese",
+      "source": "valor inicial ilustrativo"
+    }
+  },
+  "pert": {
+    "optimistic_weight": 1,
+    "most_likely_weight": 4,
+    "pessimistic_weight": 1,
+    "divisor": 6
+  },
+  "activity_types": {
+    "implementacao": "Implementação (back-end/lógica)",
+    "interface": "Interface (UI/UX)",
+    "integracao": "Integração",
+    "testes": "Testes",
+    "seguranca": "Segurança",
+    "infraestrutura": "Infraestrutura e pipeline"
+  },
+  "roles": {
+    "desenvolvimento": {
+      "junior": 90,
+      "pleno": 140,
+      "senior": 190
+    },
+    "qa": {
+      "junior": 70,
+      "pleno": 110,
+      "senior": 150
+    },
+    "devsecops": {
+      "junior": 100,
+      "pleno": 160,
+      "senior": 220
+    },
+    "product_owner": {
+      "junior": 0,
+      "pleno": 0,
+      "senior": 0
+    }
+  },
+  "ai": {
+    "modalities": {
+      "geracao_codigo": {
+        "label": "IA generativa para código",
+        "applicable_activity_types": [
+          "implementacao",
+          "integracao",
+          "interface"
+        ],
+        "eligible_share": 0.65,
+        "reduction_rate": 0.25,
+        "review_hours_per_base_hour": 0.08,
+        "rework_hours_per_base_hour": 0.04,
+        "validation_status": "hipotese",
+        "source": "valor inicial ilustrativo"
+      },
+      "vibe_coding": {
+        "label": "Vibe coding para UI/UX",
+        "applicable_activity_types": [
+          "interface"
+        ],
+        "eligible_share": 0.7,
+        "reduction_rate": 0.3,
+        "review_hours_per_base_hour": 0.1,
+        "rework_hours_per_base_hour": 0.08,
+        "validation_status": "hipotese",
+        "source": "valor inicial ilustrativo"
+      },
+      "qa_assistido": {
+        "label": "QA assistido por IA",
+        "applicable_activity_types": [
+          "testes"
+        ],
+        "eligible_share": 0.5,
+        "reduction_rate": 0.2,
+        "review_hours_per_base_hour": 0.06,
+        "rework_hours_per_base_hour": 0.03,
+        "validation_status": "hipotese",
+        "source": "valor inicial ilustrativo"
+      },
+      "devsecops_assistido": {
+        "label": "DevSecOps assistido por IA",
+        "applicable_activity_types": [
+          "infraestrutura",
+          "seguranca"
+        ],
+        "eligible_share": 0.4,
+        "reduction_rate": 0.15,
+        "review_hours_per_base_hour": 0.1,
+        "rework_hours_per_base_hour": 0.03,
+        "validation_status": "hipotese",
+        "source": "valor inicial ilustrativo"
+      }
+    }
+  },
+  "cost_types": {
+    "infraestrutura": {
+      "label": "Infraestrutura e nuvem",
+      "applies_to": "both"
+    },
+    "licencas": {
+      "label": "Licenças de software",
+      "applies_to": "both"
+    },
+    "servicos_externos": {
+      "label": "Serviços externos",
+      "applies_to": "both"
+    },
+    "ferramentas_ia": {
+      "label": "Ferramentas e APIs de IA",
+      "applies_to": "ai"
+    }
+  },
+  "contingency_rate_default": 0.15
+}
