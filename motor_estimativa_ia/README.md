@@ -173,7 +173,17 @@ Em estimativas **aprovadas**, o Tech Leader ou o administrador registram as hora
 ### Contrato de saída
 A resposta de `/estimate` é tipada pelo modelo `EstimateResult` em `models.py`, que espelha exatamente o retorno do motor. Os modelos proíbem campos extras: se o motor ganhar ou perder um campo sem que o contrato seja atualizado, os testes falham e a API retorna 500, em vez de omitir o campo sem aviso.
 
-O front-end ([../frontend](../frontend)) gera os tipos TypeScript a partir deste OpenAPI com `npm run gen:api`. Esse comando chama o `scripts/export_openapi.py`, que exporta o OpenAPI sem precisar subir o servidor, e em seguida roda o `openapi-typescript`.
+O front-end (veja [Front-end](#front-end-repositório-separado)) gera os tipos TypeScript a partir deste OpenAPI com `npm run gen:api`. Esse comando chama o `scripts/export_openapi.py`, que exporta o OpenAPI sem precisar subir o servidor, e em seguida roda o `openapi-typescript`.
+
+## Front-end (repositório separado)
+A interface web (Next.js) fica no repositório [ai-project-estimation-frontend](https://github.com/ailton-marques-unite/ai-project-estimation-frontend), não neste. Clone-o dentro da raiz deste repositório, na pasta `frontend/`, que já está no `.gitignore`:
+
+```bash
+# na raiz de ai-project-estimation-engine
+git clone git@github.com:ailton-marques-unite/ai-project-estimation-frontend.git frontend
+```
+
+O `npm run gen:api` do front-end chama `../motor_estimativa_ia/.venv/bin/python`, então ele precisa estar nessa posição, lado a lado com `motor_estimativa_ia/`. Commits e PRs do front-end são feitos no repositório dele.
 
 ## Executar os testes
 
@@ -289,7 +299,6 @@ Trabalho compartilhado pelo projeto (arquitetura, CI/CD, ambientes, observabilid
 O resultado traz as horas separadas em `hours_by_scope`, `hours_by_activity_type` e `hours_by_ai_modality`.
 
 ## Limitações intencionais desta primeira versão
-- A interface web fica em `../frontend`.
 - Login com MFA e com Google ou Microsoft ainda não é suportado.
 - A calibração não altera os parâmetros sozinha. Ela mostra os desvios, e um administrador decide e cadastra uma nova versão.
 - Os parâmetros são ilustrativos e devem ser calibrados com especialistas antes de uso comercial.
