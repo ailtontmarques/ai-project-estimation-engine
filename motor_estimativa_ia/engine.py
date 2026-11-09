@@ -23,15 +23,18 @@ def load_json(path: str | Path) -> dict[str, Any]:
         return json.load(f)
 
 
-def pert_hours(activity: dict[str, Any], parameters: dict[str, Any]) -> float:
-    """Estimativa PERT: (O + 4*M + P) / 6, usando pesos configuráveis."""
+def pert_hours(activity: dict[str, Any], parameters: dict[str, Any], name: str | None = None) -> float:
+    """Estimativa PERT: (O + 4*M + P) / 6, usando pesos configuráveis.
+
+    `name` identifica a atividade nas mensagens de erro (o usuário não vê os ids internos)."""
+    label = name or activity.get("name") or activity.get("id")
     o = float(activity["optimistic_hours"])
     m = float(activity["most_likely_hours"])
     p = float(activity["pessimistic_hours"])
     if min(o, m, p) < 0:
-        raise ValueError(f"Horas não podem ser negativas: {activity.get('id', activity.get('name'))}")
+        raise ValueError(f"Horas não podem ser negativas em {label}")
     if not (o <= m <= p):
-        raise ValueError(f"Esperado otimista <= mais provável <= pessimista em {activity.get('id', activity.get('name'))}")
+        raise ValueError(f"Esperado otimista <= mais provável <= pessimista em {label}")
     cfg = parameters["pert"]
     divisor = float(cfg["divisor"])
     if divisor <= 0:
@@ -201,7 +204,7 @@ def calculate_project(project: dict[str, Any], parameters: dict[str, Any]) -> di
         name = f'{group["name"]} / {task["name"]} / {activity["name"]}'
         validate_allocations(activity.get("allocations", {}), name)
         activity_type = validate_activity_type(activity, parameters, name)
-        base_hours = pert_hours(activity, parameters)
+        base_hours = pert_hours(activity, parameters, name)
         modality, factors = resolve_ai(activity, activity_type, parameters, name)
 
         # Revisão e retrabalho só existem quando a IA é aplicada à atividade (parcela elegível > 0).
@@ -271,6 +274,9 @@ def calculate_project(project: dict[str, Any], parameters: dict[str, Any]) -> di
         pessimistic_total += float(activity["pessimistic_hours"])
         base_labor_cost += activity_base_cost
         ai_labor_cost += activity_ai_cost
+
+    if not rows:
+        raise ValueError("O escopo não tem atividades: cadastre ao menos uma atividade antes de estimar.")
 
     # null equivale a ausente: vale a contingência padrão dos parâmetros.
     project_contingency = project.get("contingency_rate")

@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from models import EstimateResult, Parameters, Project, ProjectContent, Strict
 
@@ -52,6 +52,16 @@ class MeOut(FromORM):
 class ParameterSetCreate(Strict):
     content: Parameters
     effective_at: datetime | None = Field(default=None, description="Início da vigência; omitido = imediato")
+
+    @field_validator("content")
+    @classmethod
+    def _version_required(cls, content: Parameters) -> Parameters:
+        # Só na criação: a versão identifica o conjunto em cada estimativa. Conjuntos antigos
+        # gravados sem versão continuam legíveis (Parameters aceita string vazia).
+        version = content.config_version.strip()
+        if not version:
+            raise ValueError("config_version é obrigatório para publicar um conjunto de parâmetros.")
+        return content.model_copy(update={"config_version": version})
 
 
 class ParameterSetBrief(FromORM):
